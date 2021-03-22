@@ -1,8 +1,79 @@
-$(document).ready( function(){
-    calificacion();
+
+var capturar = false;
+var alumnos = [];
+var calificaciones = [];
+var evaluar = "";
+var tableData = "";
+var posicion = 0;
+var infoBox = document.getElementById("info");
+var buttonCapturar = document.getElementById("btnCapturar");
+var buttonGuardar = document.getElementById("btnGuardar");
+var buttonLimpiar = document.getElementById("btnLimpiar");
+var textNombre = document.getElementById("nombre");
+var textCalificacion = document.getElementById("calificacion");
+var tableBody = document.getElementById("data");
+
+buttonCapturar.addEventListener("click", function(){
+    capturar = !capturar;
+    capturaInformacion();
 });
 
+function capturaInformacion(){
 
+    if(capturar){
+        infoBox.classList.remove("d-none");
+        infoBox.classList.add("d-block");
+        buttonCapturar.classList.remove("btn-outline-primary");
+        buttonCapturar.classList.add("btn-outline-danger");
+        buttonCapturar.innerHTML = "Dejar de capturar";
+
+    }else{
+        infoBox.classList.remove("d-block");
+        infoBox.classList.add("d-none");
+        buttonCapturar.classList.remove("btn-outline-danger");
+        buttonCapturar.classList.add("btn-outline-primary");
+        buttonCapturar.innerHTML = "Capturar";
+    }
+
+    buttonLimpiar.addEventListener("click", function(){
+        textNombre.value = '';
+        textCalificacion.value = '';
+    });
+
+    buttonGuardar.addEventListener("click", function(){
+        alumnos[posicion] = textNombre.value;
+        calificaciones[posicion] = textCalificacion.value;
+
+        evaluar = evaluarCalificacion(calificaciones[posicion]);
+
+        tableData += `
+        <tr class=${evaluar}> 
+            <td>${posicion}</td>
+            <td>${alumnos[posicion]}</td>
+            <td>${calificaciones[posicion]}</td>
+            <td>${evaluar}</td>
+        </tr>`;
+        tableBody.innerHTML = tableData;
+        textNombre.value = '';
+        textCalificacion.value = '';
+        posicion++;
+
+    });
+
+}
+
+function evaluarCalificacion(cal){
+    if(cal >=0 && cal <=5 ){
+        return "reprobado"
+    } 
+    else if (cal >= 6 && cal <= 8){
+        return "aprobado"
+    }
+    else{
+        return "sobresaliente"
+    }
+}
+/*
 var opcion;
 var resultado;
 
@@ -101,4 +172,4 @@ function calificacion(){
     
 
 }
-
+*/
